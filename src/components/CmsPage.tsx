@@ -52,6 +52,7 @@ interface EditorForm {
   readTime: string;
   coverImage: string;
   tags: string;
+  isPublished: boolean;
 }
 
 const emptyForm: EditorForm = {
@@ -65,6 +66,7 @@ const emptyForm: EditorForm = {
   readTime: "2",
   coverImage: "",
   tags: "",
+  isPublished: false,
 };
 
 const slugify = (value: string) =>
@@ -76,6 +78,20 @@ const slugify = (value: string) =>
 
 const getAuthorName = (author: CmsAffirmation["author"]) =>
   typeof author === "string" ? author : (author?.name ?? "");
+
+// Normalize the backend (snake_case) row shape into the CMS view model.
+const mapAffirmation = (row: Record<string, any>): CmsAffirmation => {
+  const mapped = {
+    ...row,
+    category: row.category ?? row.category_name ?? "",
+    author: row.author ?? row.author_name ?? "",
+    date: row.date ?? (row.created_at ? String(row.created_at).slice(0, 10) : ""),
+    readTime: row.readTime ?? row.read_time ?? "2",
+    coverImage: row.coverImage ?? row.cover_image ?? "",
+    isPublished: row.isPublished ?? row.is_published ?? false,
+  };
+  return mapped as CmsAffirmation;
+};
 
 export const CmsPage = () => {
   const [token, setToken] = useState(() =>
@@ -164,6 +180,7 @@ export const CmsPage = () => {
       readTime: affirmation.readTime,
       coverImage: affirmation.coverImage || affirmation.image || "",
       tags: affirmation.tags?.join(", ") || "",
+      isPublished: affirmation.isPublished ?? false,
     });
     setSlugTouched(true);
     setImagePreview(affirmation.coverImage || affirmation.image || "");
@@ -236,7 +253,7 @@ export const CmsPage = () => {
           category_id: category?.id ?? null,
           author_id: author?.id || 1,
           cover_image: form.coverImage,
-          is_published: editingAffirmation?.isPublished ?? false,
+          is_published: form.isPublished,
         }),
       });
       
@@ -263,7 +280,7 @@ export const CmsPage = () => {
         headers: token ? { 'Authorization': `Bearer ${token}` } : undefined,
       });
       const data = await response.json();
-      setAffirmations(data.affirmations);
+      setAffirmations((data.affirmations ?? []).map(mapAffirmation));
     } catch (error) {
       console.error('Failed to load affirmations');
     }
@@ -743,6 +760,32 @@ export const CmsPage = () => {
                       onChange={(e) => setForm({ ...form, tags: e.target.value })}
                       className="w-full px-4 py-3 rounded-lg border border-[#d9ddd5] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]"
                     />
+                  </div>
+
+                  <div className="flex items-center justify-between border-t border-[#d9ddd5] pt-6">
+                    <div>
+                      <p className="text-sm font-medium text-[#18211e]">Publish</p>
+                      <p className="text-xs text-neutral-600">
+                        {form.isPublished
+                          ? "This affirmation is live on the site."
+                          : "Saved as a draft, hidden from the site."}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={form.isPublished}
+                      onClick={() => setForm({ ...form, isPublished: !form.isPublished })}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                        form.isPublished ? "bg-green-500" : "bg-neutral-300"
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          form.isPublished ? "translate-x-6" : "translate-x-1"
+                        }`}
+                      />
+                    </button>
                   </div>
 
                   <div className="flex justify-end gap-3">
