@@ -135,13 +135,19 @@ export const CmsPage = () => {
   };
 
   const startNewAffirmation = () => {
-    resetEditor();
-    setForm((current) => ({
-      ...current,
+    setEditingAffirmation(null); // Clear any existing editing
+    setForm({ 
+      ...emptyForm, 
+      date: new Date().toISOString().slice(0, 10),
       category: categories[0]?.slug ?? "",
       author: authors[0]?.name ?? "",
-    }));
+    });
+    setSlugTouched(false);
+    setImagePreview("");
+    setFormError("");
     setNotice("");
+    // Set editingAffirmation to a marker object to show the editor
+    setEditingAffirmation({} as CmsAffirmation);
   };
 
   const openAffirmation = (affirmation: CmsAffirmation) => {
@@ -204,11 +210,16 @@ export const CmsPage = () => {
     setSaving(true);
     setFormError("");
     try {
-      const url = editingAffirmation 
+      const isEditing = editingAffirmation && editingAffirmation.id;
+      const url = isEditing 
         ? apiUrl(`/api/affirmations/${editingAffirmation.id}`)
         : apiUrl('/api/affirmations');
       
-      const method = editingAffirmation ? 'PUT' : 'POST';
+      const method = isEditing ? 'PUT' : 'POST';
+      
+      // Find category and author IDs from their names/slugs
+      const category = categories.find(c => c.slug === form.category);
+      const author = authors.find(a => a.name === form.author);
       
       const response = await fetch(url, {
         method,
@@ -221,8 +232,8 @@ export const CmsPage = () => {
           slug: form.slug,
           excerpt: form.excerpt,
           content: form.content,
-          category_id: parseInt(form.category),
-          author_id: 1, // Default author for now
+          category_id: category?.slug, // Backend expects slug, not ID
+          author_id: author?.id || 1,
           cover_image: form.coverImage,
           is_published: editingAffirmation?.isPublished ?? false,
         }),
