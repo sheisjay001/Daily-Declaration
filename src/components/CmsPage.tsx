@@ -29,6 +29,7 @@ interface CmsAffirmation {
 }
 
 interface CmsCategory {
+  id: number;
   slug: string;
   name: string;
 }
@@ -232,7 +233,7 @@ export const CmsPage = () => {
           slug: form.slug,
           excerpt: form.excerpt,
           content: form.content,
-          category_id: category?.slug, // Backend expects slug, not ID
+          category_id: category?.id ?? null,
           author_id: author?.id || 1,
           cover_image: form.coverImage,
           is_published: editingAffirmation?.isPublished ?? false,
