@@ -29,7 +29,7 @@ npm run build
 - `VITE_API_URL` - Backend API URL (default: http://localhost:3001)
 
 **Production:**
-- `VITE_API_URL` - Backend API URL (e.g., https://daily-declarations-backend.onrender.com)
+- `VITE_API_URL` - Backend API URL (e.g., https://daily-declaration-backend.onrender.com)
 
 ## Deployment
 
