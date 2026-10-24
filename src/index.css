@@ -1,0 +1,142 @@
+/* ============================================
+   DAILY DECLARATIONS - DESIGN SYSTEM
+   Adapted from Payfrica Blog
+   ============================================ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color-scheme: light;
+    scroll-behavior: smooth;
+    background-color: #F8F9FA;
+    color: #111215;
+  }
+
+  body {
+    background-color: #F8F9FA;
+    color: #111215;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: 'Syne', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* ============================================
+   COLOR PALETTE
+   ============================================ */
+
+/* Daily Declarations Brand Colors (Tailwind equivalents)
+   Primary: purple-500 (#8B5CF6) - spiritual, uplifting
+   Primary Dark: purple-600 (#7C3AED)
+   Primary Light: purple-400 (#A78BFA)
+   Secondary: pink-500 (#EC4899) - feminine, warm
+   Accent: amber-500 (#F59E0B) - inspiration
+
+   Neutral Colors
+   Background: gray-50 (#F8F9FA)
+   Background Alt: white (#FFFFFF)
+   Text: gray-900 (#111215)
+   Text Muted: gray-500 (#6B7280)
+   Border: gray-200 (#E5E7EB)
+*/
+
+/* ============================================
+   HERO CONCENTRIC RINGS
+   ============================================ */
+
+.hero-concentric-rings {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 900px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 9999px;
+  border: 1px solid rgba(139, 92, 246, 0.08); /* Purple tint */
+}
+
+.hero-ring-1 { width: 320px; height: 320px; }
+.hero-ring-2 { width: 520px; height: 520px; }
+.hero-ring-3 { width: 720px; height: 720px; }
+.hero-ring-4 { width: 920px; height: 920px; }
+.hero-ring-5 { width: 1140px; height: 1140px; border-style: dashed; border-color: rgba(139, 92, 246, 0.05); }
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ============================================
+   MARQUEE ANIMATION
+   ============================================ */
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ============================================
+   DAILY DECLARATIONS SPECIFIC
+   ============================================ */
+
+/* Gradient text for declarations */
+.gradient-text {
+  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Floating animation for declarations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Glow effect */
+.glow-purple {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+.glow-pink {
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+}
