@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { apiUrl } from "../api";
 import {
   ArrowLeft,
   Check,
@@ -168,7 +169,7 @@ export const CmsPage = () => {
     setLoginPending(true);
     setLoginError("");
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(apiUrl('/api/auth/login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -204,8 +205,8 @@ export const CmsPage = () => {
     setFormError("");
     try {
       const url = editingAffirmation 
-        ? `/api/affirmations/${editingAffirmation.id}`
-        : '/api/affirmations';
+        ? apiUrl(`/api/affirmations/${editingAffirmation.id}`)
+        : apiUrl('/api/affirmations');
       
       const method = editingAffirmation ? 'PUT' : 'POST';
       
@@ -246,7 +247,7 @@ export const CmsPage = () => {
 
   const loadAffirmations = async () => {
     try {
-      const response = await fetch('/api/affirmations', {
+      const response = await fetch(apiUrl('/api/affirmations'), {
         headers: token ? { 'Authorization': `Bearer ${token}` } : undefined,
       });
       const data = await response.json();
@@ -258,7 +259,7 @@ export const CmsPage = () => {
 
   const loadCategories = async () => {
     try {
-      const response = await fetch('/api/categories');
+      const response = await fetch(apiUrl('/api/categories'));
       const data = await response.json();
       setCategories(data);
     } catch (error) {
@@ -268,7 +269,7 @@ export const CmsPage = () => {
 
   const loadAuthors = async () => {
     try {
-      const response = await fetch('/api/authors');
+      const response = await fetch(apiUrl('/api/authors'));
       const data = await response.json();
       setAuthors(data);
     } catch (error) {
@@ -289,7 +290,7 @@ export const CmsPage = () => {
     if (!token) return;
     if (!confirm("Are you sure you want to delete this affirmation?")) return;
     try {
-      const response = await fetch(`/api/affirmations/${id}`, {
+      const response = await fetch(apiUrl(`/api/affirmations/${id}`), {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` },
       });
@@ -312,7 +313,7 @@ export const CmsPage = () => {
       const affirmation = affirmations.find(a => a.id === id);
       if (!affirmation) return;
       
-      const response = await fetch(`/api/affirmations/${id}`, {
+      const response = await fetch(apiUrl(`/api/affirmations/${id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

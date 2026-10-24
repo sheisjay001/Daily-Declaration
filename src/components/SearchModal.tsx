@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, X } from 'lucide-react';
+import { apiUrl } from '../api';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -20,7 +21,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
 
       setLoading(true);
       try {
-        const response = await fetch(`/api/affirmations?search=${query}&published=true`);
+        const response = await fetch(apiUrl(`/api/affirmations?search=${query}&published=true`));
         const data = await response.json();
         setResults(data.affirmations);
       } catch (error) {

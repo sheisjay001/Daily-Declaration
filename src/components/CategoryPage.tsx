@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { AffirmationCard } from './AffirmationCard';
+import { apiUrl } from '../api';
 
 export const CategoryPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -13,8 +14,8 @@ export const CategoryPage: React.FC = () => {
     const fetchData = async () => {
       try {
         const [affirmationsRes, categoryRes] = await Promise.all([
-          fetch(`/api/affirmations?category=${slug}&published=true`),
-          fetch(`/api/categories/${slug}`)
+          fetch(apiUrl(`/api/affirmations?category=${slug}&published=true`)),
+          fetch(apiUrl(`/api/categories/${slug}`))
         ]);
         
         const affirmationsData = await affirmationsRes.json();

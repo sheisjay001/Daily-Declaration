@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Heart, ArrowLeft, Share2, Calendar, Clock } from 'lucide-react';
+import { apiUrl } from '../api';
 
 interface AffirmationDetailProps {
   // Will be fetched from API
@@ -15,7 +16,7 @@ export const AffirmationDetail: React.FC = () => {
   React.useEffect(() => {
     const fetchAffirmation = async () => {
       try {
-        const response = await fetch(`/api/affirmations/${slug}`);
+        const response = await fetch(apiUrl(`/api/affirmations/${slug}`));
         if (!response.ok) throw new Error('Failed to fetch');
         const data = await response.json();
         setAffirmation(data);

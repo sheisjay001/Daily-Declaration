@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Heart, Mail, Check } from 'lucide-react';
+import { apiUrl } from '../api';
 
 export const SubscribePage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -11,7 +12,7 @@ export const SubscribePage: React.FC = () => {
     setStatus('loading');
     
     try {
-      const response = await fetch('/api/subscribe', {
+      const response = await fetch(apiUrl('/api/subscribe'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
