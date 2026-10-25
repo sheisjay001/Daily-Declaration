@@ -52,6 +52,7 @@ interface EditorForm {
   readTime: string;
   coverImage: string;
   tags: string;
+  scheduledAt: string;
   isPublished: boolean;
 }
 
@@ -66,6 +67,7 @@ const emptyForm: EditorForm = {
   readTime: "2",
   coverImage: "",
   tags: "",
+  scheduledAt: "",
   isPublished: false,
 };
 
@@ -180,6 +182,7 @@ export const CmsPage = () => {
       readTime: affirmation.readTime,
       coverImage: affirmation.coverImage || affirmation.image || "",
       tags: affirmation.tags?.join(", ") || "",
+      scheduledAt: (affirmation as any).scheduledAt || (affirmation as any).scheduled_at || "",
       isPublished: affirmation.isPublished ?? false,
     });
     setSlugTouched(true);
@@ -254,6 +257,7 @@ export const CmsPage = () => {
           author_id: author?.id || 1,
           cover_image: form.coverImage,
           is_published: form.isPublished,
+          scheduled_at: form.scheduledAt || null,
         }),
       });
       
@@ -760,6 +764,24 @@ export const CmsPage = () => {
                       onChange={(e) => setForm({ ...form, tags: e.target.value })}
                       className="w-full px-4 py-3 rounded-lg border border-[#d9ddd5] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]"
                     />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-[#18211e] mb-2">Schedule Publish (optional)</label>
+                    <input
+                      type="datetime-local"
+                      value={form.scheduledAt}
+                      onChange={(e) => {
+                        setForm({ ...form, scheduledAt: e.target.value });
+                        if (e.target.value) {
+                          setForm({ ...form, isPublished: false });
+                        }
+                      }}
+                      className="w-full px-4 py-3 rounded-lg border border-[#d9ddd5] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]"
+                    />
+                    <p className="text-xs text-neutral-600 mt-1">
+                      Leave empty to publish immediately. If set, the post will auto-publish at this time.
+                    </p>
                   </div>
 
                   <div className="flex items-center justify-between border-t border-[#d9ddd5] pt-6">
